@@ -9,7 +9,8 @@ double SimpleMonteCarlo1(double Expiry,
     double Spot,
     double Vol,
     double r,
-    unsigned long NumberOfPath)
+    unsigned long NumberOfPath,
+    RandomGenerator rand)
 {
     double variance = Vol * Vol * Expiry;
     double rootVariance = sqrt(variance);
@@ -21,7 +22,7 @@ double SimpleMonteCarlo1(double Expiry,
 
     for (unsigned long i = 0; i < NumberOfPath; i++)
     {
-        double thisGaussian = GetOneGaussianByBoxMuller();
+        double thisGaussian = rand.getRandom();
         thisSpot = movedSpot * exp(rootVariance * thisGaussian);
         double thisPayoff = thisSpot - Strike;
         thisPayoff = thisPayoff > 0 ? thisPayoff : 0;
@@ -61,12 +62,14 @@ int main()
     cout << "\n Number of paths\n";
     cin >> NumberOfPath;
 
+    auto randGen = RandomGenerator(BoxMuller);
     double result = SimpleMonteCarlo1(Expiry,
         Strike,
         Spot,
         Vol,
         r,
-        NumberOfPath);
+        NumberOfPath,
+        randGen);
     cout << "the price is " << result << "\n";
 
     double tmp;
