@@ -6,6 +6,7 @@
 *.lo
 *.o
 *.obj
+*.pdb
 
 # Precompiled Headers
 *.gch
@@ -30,3 +31,8 @@
 *.exe
 *.out
 *.app
+
+#build folders
+.vs/JoshiC++/v17/
+.vs/JoshiC++/FileContentIndex/
+JoshiC++/x64/
