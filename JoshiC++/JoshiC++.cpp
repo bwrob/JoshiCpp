@@ -1,11 +1,16 @@
 ﻿#include"Random.h"
+#include"Payoff.h"
 #include <iostream>
 #include <cmath>
+#include <cstring>
+
+
 using namespace std;
 
 //function doing the MC simulation
-double SimpleMonteCarlo1(double Expiry,
-    double Strike,
+double SimpleMonteCarlo1(
+    PayOff payoff,
+    double Expiry,
     double Spot,
     double Vol,
     double r,
@@ -23,8 +28,7 @@ double SimpleMonteCarlo1(double Expiry,
     {
         double thisGaussian = GetOneGaussianByBoxMuller();
         thisSpot = movedSpot * exp(rootVariance * thisGaussian);
-        double thisPayoff = thisSpot - Strike;
-        thisPayoff = thisPayoff > 0 ? thisPayoff : 0;
+        double thisPayoff = payoff(thisSpot);
         runningSum += thisPayoff;
     }
 
@@ -41,8 +45,13 @@ int main()
     double Vol;
     double r;
     unsigned long NumberOfPath;
+    string type_string;
+    PayOff::OptionType type;
 
     //read in parameters
+    cout << "\nEnter Call/Putt\n";
+    cin >> type_string;
+
     cout << "\nEnter expiry\n";
     cin >> Expiry;
 
@@ -61,8 +70,17 @@ int main()
     cout << "\n Number of paths\n";
     cin >> NumberOfPath;
 
-    double result = SimpleMonteCarlo1(Expiry,
-        Strike,
+    //processing inputs
+    if (type_string == "c")
+        type = PayOff::Call;
+    else if (type_string == "p")
+        type = PayOff::Put;
+    else
+        throw "Invalid option type control string.";
+    auto payoff = PayOff(Strike, type);
+
+    double result = SimpleMonteCarlo1(payoff,
+        Expiry,
         Spot,
         Vol,
         r,
