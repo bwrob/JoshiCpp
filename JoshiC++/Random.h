@@ -1,23 +1,16 @@
-#ifndef Random1_H
-#define Random1_H
+#pragma once
 
-enum Method
+class RandomGenerator 
 {
-	Summation, BoxMuller
-};
-
-class RandomGenerator {
 public:
+	enum Method{ Summation, BoxMuller };
 	inline RandomGenerator(Method method) { _method = method; };
-	double getRandom();
+	double operator()();
 	inline Method	getMethod() { return _method; };
 	inline void		setMethod(Method method) { _method = method; };
+
 private:
 	Method _method;
 	double GetOneGaussianBySummation();
 	double GetOneGaussianByBoxMuller();
 };
-
-
-
-#endif

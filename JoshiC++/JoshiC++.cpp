@@ -27,7 +27,7 @@ double SimpleMonteCarlo1(
 
     for (unsigned long i = 0; i < NumberOfPath; i++)
     {
-        double thisGaussian = rand.getRandom();
+        double thisGaussian = rand();
         thisSpot = movedSpot * exp(rootVariance * thisGaussian);
         double thisPayoff = payoff(thisSpot);
         runningSum += thisPayoff;
@@ -40,12 +40,8 @@ double SimpleMonteCarlo1(
 
 int main()
 {
-    double Expiry;
-    double Strike;
-    double Spot;
-    double Vol;
-    double r;
-    unsigned long NumberOfPath;
+    double expiry, strike, spot, vol, rate;
+    unsigned long paths;
     string type_string;
     PayOff::OptionType type;
 
@@ -54,22 +50,22 @@ int main()
     cin >> type_string;
 
     cout << "\nEnter expiry\n";
-    cin >> Expiry;
+    cin >> expiry;
 
     cout << "\nEnter Strike\n";
-    cin >> Strike;
+    cin >> strike;
 
     cout << "\nEnter spot\n";
-    cin >> Spot;
+    cin >> spot;
 
     cout << "\nEnter vol\n";
-    cin >> Vol;
+    cin >> vol;
 
-    cout << "\nEnter r\n";
-    cin >> r;
+    cout << "\nEnter rate\n";
+    cin >> rate;
 
     cout << "\n Number of paths\n";
-    cin >> NumberOfPath;
+    cin >> paths;
     
     //processing inputs
     if (type_string == "c")
@@ -78,23 +74,11 @@ int main()
         type = PayOff::Put;
     else
         throw "Invalid option type control string.";
-    auto payoff = PayOff(Strike, type);
+    auto payoff = PayOff(strike, type);
     
-    auto randGen = RandomGenerator(BoxMuller);
+    auto randGen = RandomGenerator(RandomGenerator::BoxMuller);
     
-    double result = SimpleMonteCarlo1(payoff,
-        Expiry,
-        Spot,
-        Vol,
-        r,
-        NumberOfPath,
-        randGen);
-        
+    double result = SimpleMonteCarlo1(payoff, expiry, spot, vol, rate, paths, randGen);
+
     cout << "the price is " << result << "\n";
-
-    double tmp;
-    cin >> tmp;
-
-    return 0;
-
 }

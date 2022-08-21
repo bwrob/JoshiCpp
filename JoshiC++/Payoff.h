@@ -1,4 +1,5 @@
 #pragma once
+
 class PayOff
 {
 public:
@@ -10,4 +11,3 @@ private:
 	OptionType _type;
 	double _strike;
 };
-
