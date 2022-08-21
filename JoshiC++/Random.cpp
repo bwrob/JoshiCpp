@@ -4,7 +4,21 @@
 
 using namespace std;
 
-double GetOneGaussianBySummation()
+double RandomGenerator::getRandom()
+{
+	switch (_method)
+	{
+	case Summation:
+		return GetOneGaussianBySummation();
+	case BoxMuller:
+		return GetOneGaussianByBoxMuller();
+	default:
+		throw "No such random generation method.";
+		break;
+	}
+}
+
+double RandomGenerator::GetOneGaussianBySummation()
 {
 	double result = 0;
 
@@ -16,7 +30,7 @@ double GetOneGaussianBySummation()
 	return result;
 }
 
-double GetOneGaussianByBoxMuller()
+double RandomGenerator::GetOneGaussianByBoxMuller()
 {
 	double result;
 	double x, y;
