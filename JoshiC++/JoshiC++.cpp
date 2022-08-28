@@ -3,13 +3,13 @@
 #include <iostream>
 #include <cmath>
 #include <cstring>
-
+#include <memory>
 
 using namespace std;
 
 //function doing the MC simulation
-double SimpleMonteCarlo1(
-    PayOff payoff,
+double SimpleMonteCarlo(
+    shared_ptr<PayOff> payoff,
     double Expiry,
     double Spot,
     double Vol,
@@ -29,7 +29,7 @@ double SimpleMonteCarlo1(
     {
         double thisGaussian = rand();
         thisSpot = movedSpot * exp(rootVariance * thisGaussian);
-        double thisPayoff = payoff(thisSpot);
+        double thisPayoff = (*payoff)(thisSpot);
         runningSum += thisPayoff;
     }
 
@@ -41,13 +41,11 @@ double SimpleMonteCarlo1(
 int main()
 {
     double expiry, strike, spot, vol, rate;
-    unsigned long paths;
-    string type_string;
-    PayOff::OptionType type;
+    unsigned long paths, type;
 
     //read in parameters
     cout << "\nEnter Call/Putt\n";
-    cin >> type_string;
+    cin >> type;
 
     cout << "\nEnter expiry\n";
     cin >> expiry;
@@ -68,17 +66,15 @@ int main()
     cin >> paths;
     
     //processing inputs
-    if (type_string == "c")
-        type = PayOff::Call;
-    else if (type_string == "p")
-        type = PayOff::Put;
+    shared_ptr<PayOff> ptr_payoff;
+    if (type == 0)
+        ptr_payoff = make_shared<PayOffCall>(strike);
     else
-        throw "Invalid option type control string.";
-    auto payoff = PayOff(strike, type);
-    
+        ptr_payoff = make_shared<PayOffPut>(strike);
+
     auto randGen = RandomGenerator(RandomGenerator::BoxMuller);
     
-    double result = SimpleMonteCarlo1(payoff, expiry, spot, vol, rate, paths, randGen);
+    double result = SimpleMonteCarlo(ptr_payoff, expiry, spot, vol, rate, paths, randGen);
 
     cout << "the price is " << result << "\n";
 }
