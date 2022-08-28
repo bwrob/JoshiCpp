@@ -4,10 +4,10 @@ class RandomGenerator
 {
 public:
 	enum Method{ Summation, BoxMuller };
-	inline RandomGenerator(Method method) { _method = method; };
+	RandomGenerator(Method method) { _method = method; };
 	double operator()();
-	inline Method	getMethod() { return _method; };
-	inline void		setMethod(Method method) { _method = method; };
+	Method getMethod() { return _method; };
+	void setMethod(Method method) { _method = method; };
 
 private:
 	Method _method;
