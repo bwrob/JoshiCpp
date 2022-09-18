@@ -130,7 +130,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="JoshiC++.cpp" />
+    <ClCompile Include="Driver.cpp" />
     <ClCompile Include="MonteCarlo.cpp" />
     <ClCompile Include="Payoff.cpp" />
     <ClCompile Include="Random.cpp" />
