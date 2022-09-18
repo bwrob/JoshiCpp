@@ -4,6 +4,7 @@ class RandomGenerator
 {
 public:
 	enum Method{ Summation, BoxMuller };
+	RandomGenerator() = default;
 	RandomGenerator(Method method) { _method = method; };
 	double operator()();
 	Method getMethod() { return _method; };
